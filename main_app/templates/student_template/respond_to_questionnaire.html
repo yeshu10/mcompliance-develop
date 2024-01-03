@@ -1,0 +1,53 @@
+{% extends 'main_app/base.html' %}
+{% block page_title %}{{ page_title }}{% endblock page_title %}
+{% block content %}
+    <section class="content">
+        <div class="container-fluid">
+            <div class="row">
+                <div class="col-md-12">
+                    <div class="card card-dark">
+                        <div class="card-header">
+                            <h3 class="card-title">{{ page_title }}</h3>
+                        </div>
+                        <div class="card-body">
+                            <form method="post" action="{% url 'submit_responses' %}"  enctype="multipart/form-data">
+                                {% csrf_token %}
+                                
+                                <input type="hidden" name="q_id" value="{{ questionnaires.0.q_id }}">
+                                <input type="hidden" name="questionnaire_id" value="{{ questionnaires.0.id }}">  
+                    
+                                <div class="form-group table">
+                                    <table class="table table-bordered">
+                                        <tr>
+                                            <th>#</th>
+                                            <th>Question</th>
+                                            <th>Your Response</th>
+                                            <th>Files</th>
+                                            <!-- Add other columns if needed -->
+                                        </tr>
+                                        {% for questionnaire in questionnaires %}
+                                            <tr>
+                                                <td>{{ forloop.counter }}</td>
+                                                <td>{{ questionnaire.question }}</td>
+                                                <td>
+                                                    <textarea name="response_{{ questionnaire.question_id }}" rows="4" cols="50"></textarea>
+                                                    <input type="hidden" name="question_id_{{ forloop.counter }}" value="{{ questionnaire.question_id }}">
+                                                </td>
+                                                <td>
+                                                    <input type="file" name="file_{{ questionnaire.question_id }}">
+                                                </td>
+                                                <!-- Add other columns if needed -->
+                                            </tr>
+                                        {% endfor %}
+                                    </table>
+                                </div>
+                                
+                                <button type="submit" class="btn btn-primary">Submit</button>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+{% endblock content %}

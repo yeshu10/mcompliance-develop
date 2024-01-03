@@ -1,0 +1,153 @@
+{% extends 'main_app/base.html' %}
+{% block page_title %}{{ page_title }}{% endblock page_title %}
+{% block content %}
+    <section class="content">
+        <div class="container-fluid">
+            <div class="row">
+                <div class="col-md-12">
+                    <div class="card card-dark">
+                        <div class="card-header">
+                            <h3 class="card-title">{{ page_title }}</h3>
+                        </div>
+                        <div class="card-body">
+                            <div class="form-group table">
+                                {% if no_responses %}
+                                    <p>No responses available for this questionnaire.</p>
+                                {% else %}
+                                    <form id="editForm" method="post" action="{% url 'edited_responses' %}" enctype="multipart/form-data" >
+                                        {% csrf_token %}
+                                        <table class="table table-bordered">
+                                            <thead>
+                                                <tr>
+                                                    <th>#</th>
+                                                    <th>Question</th>
+                                                    <th>Response</th>
+                                                    <th id="edit1-response">Edit1_Response</th>
+                                                    <th id="edit2-response">Edit2_Response</th>
+                                                    <th id="edit3-response">Edit3_Response</th>
+                                                    <th id="edit-response-header" style="display: none;">Edit Response</th>
+                                                    <th id="edit-response-header" style="display: none;">Edit Response</th>
+                                                    <th id="edit-file-header" style="display: none;">Edit File</th>
+                                                    
+                                                </tr>
+                                            </thead>
+                                            <tbody>
+                                                {% for row in rows %}
+                                                    <tr>
+                                                        <td>{{ forloop.counter }}</td>
+                                                        <td>{{ row.question }}</td>
+                                                        <td>{{ row.response }}</td>
+                                                        <td id="edit1-response{{ forloop.counter }}">
+                                                            {{ row.edit1_response }}
+                                                        </td>
+                                                        <td id="edit2-response{{ forloop.counter }}">
+                                                            {{ row.edit2_response }}
+                                                        </td>
+                                                        <td id="edit3-response{{ forloop.counter }}">
+                                                            {{ row.edit3_response }}
+                                                        </td>
+                                                        <td id="edit-response{{ forloop.counter }}" style="display: none;">
+                                                            <input type="text" class="form-control" name="edit-response{{ row.id }}" placeholder="Enter Response 1">
+                                                             <!-- <p>{{ row.id }}</p> -->
+                                                        </td>
+                                                        <td id="edit-response{{ forloop.counter }}" style="display: none;">
+                                                            <input type="file" class="form-control" name="file_{{ row.id }}">
+                                                           
+                                                        </td>
+                                                    </tr>
+                                                {% endfor %}
+                                            </tbody>
+                                        </table>
+                                        <div class="response-info">
+                                            <div class="edit-counter-box">
+                                                <p>No. of Edits can be performed:<span id="editCounterValue"> {{ edit_counter_value }}</span></p>
+                                                
+                                            </div>
+                                            <button class="btn btn-success" type="button" id="editButton">Edit</button>
+                                            <button class="btn btn-primary" type="submit" style="display: none;" id="submitButton">Submit</button>
+                                        </div>
+                                    </form>
+                                {% endif %}
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- JavaScript to handle the click event of the "Edit" button and show/hide submit button -->
+    <script>
+        document.addEventListener("DOMContentLoaded", function() {
+        // // Call the function to check and disable the button
+        checkAndDisableEditButton();
+        // var editResponse1Cells = document.querySelectorAll('[id^="edit1-response"],[id^="edit2-response"],[id^="edit3-response"]');
+        // editResponse1Cells.forEach(function (cell) {
+        //     if (cell.textContent.trim() !== "") {
+        //         cell.style.display = '';
+        //     }
+        // });
+        var editResponse1Cells = document.querySelectorAll('[id^="edit1-response"]');
+        var editResponse2Cells = document.querySelectorAll('[id^="edit2-response"]');
+        var editResponse3Cells = document.querySelectorAll('[id^="edit3-response"]'); 
+
+        function showCells(cells) {
+        cells.forEach(function (cell) {
+            if (cell.textContent.trim() !== "") {
+                cell.style.display = '';
+                }
+        });
+        }
+      
+
+            showCells(editResponse1Cells);
+            showCells(editResponse2Cells);
+            showCells(editResponse3Cells);
+        });
+        document.getElementById('editButton').addEventListener('click', function() {
+            // Toggle visibility of the "Edit Response 1" column header
+            var editResponseHeader = document.getElementById('edit-response-header');
+            editResponseHeader.style.display = (editResponseHeader.style.display === 'none') ? '' : 'none';
+            
+            var editfileHeader = document.getElementById('edit-file-header');
+            editfileHeader.style.display = (editfileHeader.style.display === 'none') ? '' : 'none';
+            // Toggle visibility of the "Edit Response 1" column cells
+            var editResponseCells = document.querySelectorAll('[id^="edit-response"]');
+            editResponseCells.forEach(function(cell) {
+                cell.style.display = (cell.style.display === 'none') ? '' : 'none';
+            });
+
+            // Toggle visibility of the submit button
+            var submitButton = document.getElementById('submitButton');
+            submitButton.style.display = (submitButton.style.display === 'none') ? '' : 'none';
+
+            // Add logic here to update or fetch data for Edit Response 1 and update the corresponding table cells
+            // For simplicity, you can use alert as a placeholder
+            alert('Performing edit for Response 1');
+    }); 
+        
+
+        // JavaScript to handle the click event of the "Submit" button
+        document.getElementById('submitButton').addEventListener('click', function() {
+            // Add logic here to submit the edited responses
+            // For simplicity, you can use alert as a placeholder
+            alert('Submitting edited responses');
+        });
+        
+        function checkAndDisableEditButton() {
+        var editCounterValue = document.getElementById("editCounterValue").textContent;
+        // Print the value to the console
+        console.log("Edit Counter Value:", editCounterValue);
+
+        // Disable the "Edit" button if editCounterValue is 0
+        var editButton = document.getElementById('editButton');
+        if (parseInt(editCounterValue, 10) === 0) {
+            editButton.disabled = true;
+        }
+    }
+    </script>
+    
+{% endblock content %}
+
+
+

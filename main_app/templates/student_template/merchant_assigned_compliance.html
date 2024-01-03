@@ -1,0 +1,50 @@
+{% extends 'main_app/base.html' %}
+{% load static %}
+{% block page_title %}{{ page_title }}{% endblock page_title %}
+{% block content %}
+    <section class="content">
+        <div class="container-fluid">
+            <div class="row">
+                <div class="col-md-12">
+                    <div class="card card-dark">
+                        <div class="card-header">
+                            <h3 class="card-title">{{ page_title }}</h3>
+                        </div>
+                        <div class="card-body">
+                            <div class="form-group table">
+                                <table class="table table-bordered">
+                                    <tr>
+                                        <th>#</th>
+                                        <th>Questionnaire Name</th>
+                                        <th>Action</th>
+                                        <th>Action 2</th>
+                                    </tr>
+                                    {% for questionnaire in assigned_questionnaires %}
+                                            <tr>
+                                                <td>{{ forloop.counter }}</td>
+                                                <td>{{ questionnaire.name }}</td>
+                                                <td>
+                                                    <a href="{% url 'merchant_create_form' questionnaire.q_id %}" class="btn btn-primary">Respond</a>
+                                                </td>
+                                                <td>    
+                                                    
+                                                    <a href="{% url 'merchant_view_response' questionnaire.q_id %}" class="btn btn-info">View Responses</a>
+                                                  
+                                                    
+                                                </td>
+                                            </tr>
+                                       
+                                    {% empty %}
+                                        <tr>
+                                            <td colspan="4">No questionnaires assigned to this merchant.</td>
+                                        </tr>
+                                    {% endfor %}
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+{% endblock content %}

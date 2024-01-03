@@ -1,0 +1,21 @@
+{% extends 'main_app/base.html' %}
+{% block page_title %}Data Already Present{% endblock page_title %}
+{% block content %}
+    <section class="content">
+        <div class="container-fluid">
+            <div class="row">
+                <div class="col-md-12">
+                    <div class="card card-danger">
+                        <div class="card-header">
+                            <h3 class="card-title">Data Already Present</h3>
+                        </div>
+                        <div class="card-body">
+                            <p>Data is already present for the selected questionnaire. You cannot submit new responses.</p>
+                            <a href="{% url 'merchant_assigned_compliance' %}" class="btn btn-primary">Back to Questionnaires</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+{% endblock content %}
